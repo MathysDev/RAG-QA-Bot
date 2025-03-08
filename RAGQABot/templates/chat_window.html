@@ -25,17 +25,28 @@
             width: 100%;
             margin-top: 10px;
         }
+        .answer {
+            margin-right: 20px;
+            color: #666;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-box" id="chat-box">
-            <!-- Chat messages will appear here -->
+            {% for message in messages %}
+                <div class="chat-message">
+                    <strong>{{ message.user }}:</strong> {{ message.question }}
+                    <div class="answer"><strong>BOT:</strong> {{ message.answer }}</div>
+                </div>
+            {% endfor %}
         </div>
         <form method="POST" action="{% url 'input_box' %}">
             {% csrf_token %}
             <input type="text" name="user_input" class="input-box" placeholder="Type your question here...">
             <button type="submit">Send</button>
+            <button type="button" onclick="window.location.href='{% url 'clear_chat' %}'">Clear Chat</button>
         </form>
     </div>
 </body>

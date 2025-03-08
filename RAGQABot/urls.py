@@ -21,5 +21,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('frontview/', views.index, name='index'),
+    path('', views.index, name='index'),
     path('input_box/', views.input_box, name='input_box'),
+    path('clear_chat/', views.clear_chat, name='clear_chat'),
 ]
