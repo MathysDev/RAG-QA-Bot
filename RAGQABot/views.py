@@ -8,6 +8,11 @@ from .models import RAGQA
 def index(request):
     messages = RAGQA.objects.all()
     print("Inside index view")
+    ollama_api_url = "http://localhost:11434/api/pull"  # Replace with your Ollama API endpoint
+    payload = {"model": "llama2"}
+    response = requests.post(ollama_api_url, json=payload)
+    print(response.text)
+
     return render(request, 'chat_window.html', {'messages': messages})
 
 
