@@ -125,3 +125,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEFAULT_CHARSET = 'utf-8'
+
+ALLOWED_HOSTS = [
+    'ragcontainer.thankfulcoast-eccca24a.swedencentral.azurecontainerapps.io',
+    'localhost',
+    '127.0.0.1',
+    '[::1]',
+]
