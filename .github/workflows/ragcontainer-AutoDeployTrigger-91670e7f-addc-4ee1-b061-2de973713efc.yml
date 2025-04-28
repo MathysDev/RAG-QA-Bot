@@ -41,6 +41,7 @@ jobs:
           registryPassword: ${{ secrets.RAGCONTAINER_REGISTRY_PASSWORD }}
           containerAppName: ragcontainer
           resourceGroup: RAGBot
+          disableTelemetry: true
           imageToBuild: mathysdev.azurecr.io/ragcontainer:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_

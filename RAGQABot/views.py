@@ -6,7 +6,9 @@ from .models import RAGQA
 
 
 def index(request):
-    messages = RAGQA.objects.all()
+    messages = []  # Initialize messages as an empty list
+    if RAGQA.objects.exists():
+        messages = RAGQA.objects.all()
     print("Inside index view")
     ollama_api_url = "http://localhost:11434/api/pull"  # Replace with your Ollama API endpoint
     payload = {"model": "llama2"}
@@ -28,7 +30,12 @@ def input_box(request):
         messages = RAGQA.objects.all()
         return render(request, 'chat_window.html', {'messages': messages})
     else:
-        messages = RAGQA.objects.all()
+        if RAGQA.objects.exists():
+            messages = RAGQA.objects.all()
+        
+    if not messages:
+        print("No messages found in the database.")
+        messages = []
     return render(request, 'chat_window.html', {'messages': messages})
 
 

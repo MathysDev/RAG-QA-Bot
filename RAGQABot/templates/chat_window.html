@@ -1,39 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Window</title>
     <style>
+        /* Allgemeine Stile */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
         .chat-container {
             width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
             border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
+
+        .chat-header {
+            background-color: #003366;
+            color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
         .chat-box {
-            width: 100%;
-            height: 300px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            height: 400px;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
             padding: 10px;
-            overflow-y: scroll;
+            border-radius: 5px;
+            background-color: #e6f7ff;
         }
-        .input-box {
-            width: 100%;
-            margin-top: 10px;
+
+        .chat-message strong {
+            color: #003366;
         }
+
         .answer {
-            margin-right: 20px;
-            color: #666;
-            text-align: right;
+            margin-top: 5px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #d9f7be;
+            color: #333333;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 15px;
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-box {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .input-container button {
+            padding: 10px 20px;
+            background-color: #003366;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #0055a5;
+        }
+
+        .logo {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .logo img {
+            max-width: 150px;
         }
     </style>
 </head>
 <body>
+    <div class="logo">
+        <img src="https://www.clientis.ch/documents/20154/24627836/1-7-logo-mit-signet-blau.png/8d63f52a-479f-1d3e-39c3-ef52e2fe24e6?t=1658399798545&imagePreview=1" alt="Clientis Logo">
+    </div>
     <div class="chat-container">
+        <div class="chat-header">
+            Willkommen beim Clientis Chat
+        </div>
         <div class="chat-box" id="chat-box">
             {% for message in messages %}
                 <div class="chat-message">
@@ -44,10 +115,19 @@
         </div>
         <form method="POST" action="{% url 'input_box' %}">
             {% csrf_token %}
-            <input type="text" name="user_input" class="input-box" placeholder="Type your question here...">
-            <button type="submit">Send</button>
-            <button type="button" onclick="window.location.href='{% url 'clear_chat' %}'">Clear Chat</button>
+            <div class="input-container">
+                <input type="text" name="user_input" class="input-box" placeholder="Ihre Nachricht eingeben...">
+                <button type="submit">Senden</button>
+                <button type="button" onclick="window.location.href='{% url 'clear_chat' %}'">Chat löschen</button>
+            </div>
         </form>
     </div>
+    <script>
+        // Scroll the chat box to the bottom when the page loads
+        window.onload = function() {
+            var chatBox = document.getElementById('chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+    </script>
 </body>
 </html>
