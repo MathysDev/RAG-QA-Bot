@@ -48,9 +48,9 @@ jobs:
         uses: azure/cli@v1
         with:
           inlineScript: |
-        az containerapp update \
-          --name ragcontainer \
-          --resource-group RAGBot \
-          --image mathysdev.azurecr.io/ragcontainer:${{ github.sha }} \
-          --container-name ragcontainer 
+            az containerapp update \
+              --name ragcontainer \
+              --resource-group RAGBot \
+              --image mathysdev.azurecr.io/ragcontainer:${{ github.sha }} \
+              --container-name ragcontainer 
 
