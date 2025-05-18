@@ -31,19 +31,26 @@ jobs:
           tenant-id: ${{ secrets.RAGCONTAINER_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.RAGCONTAINER_AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          registryUrl: mathysdev.azurecr.io
-          registryUsername: ${{ secrets.RAGCONTAINER_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.RAGCONTAINER_REGISTRY_PASSWORD }}
-          containerAppName: ragcontainer
-          resourceGroup: RAGBot
-          disableTelemetry: true
-          imageToBuild: mathysdev.azurecr.io/ragcontainer:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
 
+      - name: Build Docker image
+        run: |
+          docker build -t mathysdev.azurecr.io/ragcontainer:${{ github.sha }} .
+
+      - name: Login to Azure Container Registry
+        run: |
+          echo "${{ secrets.RAGCONTAINER_REGISTRY_PASSWORD }}" | docker login mathysdev.azurecr.io -u ${{ secrets.RAGCONTAINER_REGISTRY_USERNAME }} --password-stdin
+
+      - name: Push Docker image to ACR
+        run: |
+          docker push mathysdev.azurecr.io/ragcontainer:${{ github.sha }}
+
+      - name: Deploy to Azure Container App
+        uses: azure/cli@v1
+        with:
+          inlineScript: |
+        az containerapp update \
+          --name ragcontainer \
+          --resource-group RAGBot \
+          --image mathysdev.azurecr.io/ragcontainer:${{ github.sha }}
+          --container-name ragcontainer 
 
