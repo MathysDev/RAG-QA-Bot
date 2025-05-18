@@ -51,6 +51,6 @@ jobs:
         az containerapp update \
           --name ragcontainer \
           --resource-group RAGBot \
-          --image mathysdev.azurecr.io/ragcontainer:${{ github.sha }}
+          --image mathysdev.azurecr.io/ragcontainer:${{ github.sha }} \
           --container-name ragcontainer 
 
