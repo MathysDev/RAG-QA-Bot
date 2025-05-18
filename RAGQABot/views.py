@@ -6,6 +6,7 @@ from .models import RAGQA
 
 
 def index(request):
+    get_header_info(request)  # Call get_header_info to extract header information
     messages = []  # Initialize messages as an empty list
     if RAGQA.objects.exists():
         messages = RAGQA.objects.all()
@@ -14,9 +15,14 @@ def index(request):
     payload = {"model": "llama2"}
     response = requests.post(ollama_api_url, json=payload)
     print(response.text)
-
+    db = faiss.read_index("faiss_index.index")
     return render(request, 'chat_window.html', {'messages': messages})
 
+def get_header_info(request):
+    print("Inside get_header_info view")
+    username = request.headers.get('X-MS-CLIENT-PRINCIPAL-NAME', 'Anonymous')
+    userid = request.header.get('X-MS-CLIENT-PRINCIPAL-ID',1) 
+    print(f"Username: {username}, User ID: {userid}")  # Debugging line
 
 def input_box(request):
     print("Inside input_box view")
