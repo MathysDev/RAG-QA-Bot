@@ -9,31 +9,33 @@ def index(request):
     get_header_info(request)  # Call get_header_info to extract header information
     messages = []  # Initialize messages as an empty list
     if RAGQA.objects.exists():
-        messages = RAGQA.objects.all()
+        userid = request.headers.get('X-MS-CLIENT-PRINCIPAL-ID',1)
+        messages = RAGQA.objects.filter(userid=userid)
     print("Inside index view")
     ollama_api_url = "http://localhost:11434/api/pull"  # Replace with your Ollama API endpoint
     payload = {"model": "llama2"}
     response = requests.post(ollama_api_url, json=payload)
     print(response.text)
-    db = faiss.read_index("faiss_index.index")
+   
     return render(request, 'chat_window.html', {'messages': messages})
 
 def get_header_info(request):
     print("Inside get_header_info view")
-    username = request.headers.get('X-MS-CLIENT-PRINCIPAL-NAME', 'Anonymous')
-    userid = request.header.get('X-MS-CLIENT-PRINCIPAL-ID',1) 
+    username = request.headers.get('X-MS-CLIENT-PRINCIPAL-NAME', 'Entwickler')
+    userid = request.headers.get('X-MS-CLIENT-PRINCIPAL-ID',1) 
     print(f"Username: {username}, User ID: {userid}")  # Debugging line
 
 def input_box(request):
     print("Inside input_box view")
     if request.method == 'POST':
         user_input = request.POST.get('user_input')
-        user = "Anonymous"
+        user = request.headers.get('X-MS-CLIENT-PRINCIPAL-NAME', 'Entwickler')
+        userid = request.headers.get('X-MS-CLIENT-PRINCIPAL-ID',1)
         
         print(f"User Input: {user_input}")  # Debugging line
-        new_message = RAGQA.objects.create(question=user_input, user=user)
+        new_message = RAGQA.objects.create(question=user_input, user=user, userid=userid)
         generate_response(new_message)
-        messages = RAGQA.objects.all()
+        messages = RAGQA.objects.filter(userid=userid)
         return render(request, 'chat_window.html', {'messages': messages})
     else:
         if RAGQA.objects.exists():
